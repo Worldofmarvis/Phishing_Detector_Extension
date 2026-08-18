@@ -1,4 +1,4 @@
-# Phishing Detector — Chrome Extension
+# Phishing Detector — Chrome Extension 
 
 A Chrome extension (Manifest V3) that scans the pages you visit for phishing
 indicators, combining **heuristic URL/page analysis** with a **local
