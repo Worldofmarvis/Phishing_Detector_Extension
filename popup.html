@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Phishing Detector</h1>
+  </div>
+
+  <div id="verdict-box" class="verdict safe">
+    <span id="verdict-icon">✓</span>
+    <span id="verdict-text">Checking this page...</span>
+  </div>
+
+  <div class="score-row">
+    <span>Risk score:</span>
+    <span id="score-value">0</span>
+  </div>
+
+  <div class="reasons">
+    <h2>Details</h2>
+    <ul id="reasons-list">
+      <li class="muted">No issues found yet.</li>
+    </ul>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
