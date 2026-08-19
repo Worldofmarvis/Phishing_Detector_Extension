@@ -19,7 +19,6 @@ blocklist** of known-bad domains.
   Dangerous) with the specific reasons a site was flagged
 
 ## How it works
-
 ```
 webNavigation event ──▶ background.js ──▶ heuristics.js (score the URL)
                                        └─▶ blocklist.json (check domain)
@@ -27,7 +26,6 @@ content.js (runs on page) ──▶ scans DOM ──▶ sends signals to backgro
 background.js ──▶ combines everything ──▶ updates badge + stores result
 popup.js ──▶ requests result for active tab ──▶ renders verdict + reasons
 ```
-
 ## Installation (development mode)
 
 1. Clone this repo:
