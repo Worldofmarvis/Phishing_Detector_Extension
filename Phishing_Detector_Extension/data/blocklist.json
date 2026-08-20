@@ -1,0 +1,10 @@
+{
+  "_comment": "Sample known-bad domains for local testing. Replace/extend this with a real feed (e.g. OpenPhish, PhishTank export) for production use.",
+  "domains": [
+    "example-phishing-test.com",
+    "secure-login-verify-account.tk",
+    "paypal-security-alert.xyz",
+    "amaz0n-account-update.top",
+    "appleid-verify-support.click"
+  ]
+}

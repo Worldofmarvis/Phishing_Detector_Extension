@@ -1,0 +1,88 @@
+body {
+  width: 300px;
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 14px;
+  color: #1a1a1a;
+}
+
+.header h1 {
+  font-size: 16px;
+  margin: 0 0 12px 0;
+}
+
+.verdict-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.verdict-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verdict-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.verdict-text {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.risk-level-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.gauge-wrap {
+  margin-top: 12px;
+  text-align: center;
+}
+
+#gauge-svg {
+  width: 200px;
+  height: 110px;
+}
+
+.gauge-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #888;
+  padding: 0 16px;
+  margin-top: -6px;
+}
+
+.reasons {
+  margin-top: 10px;
+}
+
+.reasons h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #888;
+  margin: 0 0 6px 0;
+}
+
+#reasons-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.muted {
+  color: #999;
+  list-style: none;
+  margin-left: -18px;
+}
