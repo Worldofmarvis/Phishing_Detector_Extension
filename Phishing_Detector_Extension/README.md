@@ -79,7 +79,3 @@ test("flags typosquatted paypal domain", () => {
 
 This is a learning/portfolio project. Heuristic scores are indicators, not
 guarantees — always exercise your own judgment on suspicious sites.
-
-## License
-
-MIT
