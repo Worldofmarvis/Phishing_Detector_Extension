@@ -1,4 +1,4 @@
-# Phishing Detector — Chrome Extension 
+# Phishing Detector — Chrome Extension
 
 A Chrome extension (Manifest V3) that scans the pages you visit for phishing
 indicators, combining **heuristic URL/page analysis** with a **local
@@ -15,17 +15,39 @@ blocklist** of known-bad domains.
 - 🚫 **Blocklist matching** — checks the domain against a local list of known
   phishing sites (`data/blocklist.json`), designed to be swapped for a real
   feed like OpenPhish or PhishTank
-- 🟢🟡🔴 **Toolbar badge + popup** — color-coded verdict (Safe / Suspicious /
-  Dangerous) with the specific reasons a site was flagged
+- 🎚️ **5-level risk gauge** — popup shows a Very Low → Severe risk gauge with
+  the specific reasons a site was flagged, instead of a flat safe/unsafe flag
+- 🔔 **Proactive alerts** — dangerous pages trigger a system notification and
+  an in-page warning banner automatically, with a one-click "Leave This Site"
+  action — no need to open the popup to find out
 
 ## How it works
+
+```mermaid
+flowchart TD
+    A[User navigates to a page] --> B["background.js<br/>webNavigation event fires"]
+    A --> F["content.js<br/>injected into the page"]
+
+    B --> C["utils/heuristics.js<br/>score the URL"]
+    B --> D["data/blocklist.json<br/>check domain"]
+    C --> E[Combine into base result]
+    D --> E
+
+    F --> G[Scan DOM for phishing signals]
+    G --> H["Send signals to background.js"]
+
+    E --> I["background.js<br/>merge base result + content signals"]
+    H --> I
+
+    I --> J{Verdict}
+    J -->|Safe / Suspicious| K[Update toolbar badge]
+    J -->|Dangerous| L["Show system notification<br/>+ in-page warning banner"]
+
+    K --> M["User opens popup.js"]
+    L --> M
+    M --> N[Render risk gauge + reasons]
 ```
-webNavigation event ──▶ background.js ──▶ heuristics.js (score the URL)
-                                       └─▶ blocklist.json (check domain)
-content.js (runs on page) ──▶ scans DOM ──▶ sends signals to background.js
-background.js ──▶ combines everything ──▶ updates badge + stores result
-popup.js ──▶ requests result for active tab ──▶ renders verdict + reasons
-```
+
 ## Installation (development mode)
 
 1. Clone this repo:
