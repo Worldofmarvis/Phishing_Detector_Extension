@@ -1,27 +1,38 @@
 # Phishing Detector — Chrome Extension
 
-A Chrome extension (Manifest V3) that scans the pages you visit for phishing
-indicators, combining **heuristic URL/page analysis** with a **local
-blocklist** of known-bad domains.
+Phishing sites are everywhere, and honestly, some of them are good enough
+that even careful people click through them. I built this extension to see
+how far I could get toward catching them automatically — without relying on
+some third-party API doing all the work behind the scenes.
 
-## Features
+It's a Chrome extension (Manifest V3) that quietly watches the pages you
+visit and flags the ones that look like phishing, using a mix of URL
+heuristics, page-content checks, and a local blocklist. No servers, no
+tracking — everything runs in your browser.
 
-- 🔍 **URL heuristics** — flags IP-based URLs, `@` redirect tricks, excessive
-  subdomains, suspicious TLDs, non-HTTPS pages, and typosquatted brand names
-  (e.g. `paypa1.com`, `amaz0n-support.top`)
-- 📄 **Page-content checks** — detects login forms that submit to a different
-  domain than the page itself, password fields on non-HTTPS pages, and brand
-  mentions that don't match the actual domain
-- 🚫 **Blocklist matching** — checks the domain against a local list of known
-  phishing sites (`data/blocklist.json`), designed to be swapped for a real
-  feed like OpenPhish or PhishTank
-- 🎚️ **5-level risk gauge** — popup shows a Very Low → Severe risk gauge with
-  the specific reasons a site was flagged, instead of a flat safe/unsafe flag
-- 🔔 **Proactive alerts** — dangerous pages trigger a system notification and
-  an in-page warning banner automatically, with a one-click "Leave This Site"
-  action — no need to open the popup to find out
+## What it does
+
+- 🔍 **Looks at the URL itself** — raw IP addresses instead of domains, the
+  classic `@` redirect trick, way too many subdomains, sketchy TLDs, no
+  HTTPS, and domains that are *suspiciously* close to a real brand name
+  (`paypa1.com`, `amaz0n-support.top` — you get the idea)
+- 📄 **Looks at the actual page** — does the login form quietly submit to a
+  totally different domain? Is there a password field sitting on a
+  non-HTTPS page? Does the page say "PayPal" everywhere while the URL says
+  otherwise?
+- 🚫 **Checks against a blocklist** — a local list of known-bad domains
+  (`data/blocklist.json`), built to be swapped out for a real feed like
+  OpenPhish or PhishTank later on
+- 🎚️ **Shows a proper risk gauge** — instead of a blunt "safe or not,"
+  the popup shows where a site lands on a five-level scale from Very Low to
+  Severe, along with the actual reasons it was flagged
+- 🔔 **Actually warns you, unprompted** — if a page is dangerous, you don't
+  have to remember to check the extension. You get a notification and a
+  banner right on the page, with a one-click way to leave
 
 ## How it works
+
+Roughly, here's the flow from "you open a tab" to "you get warned":
 
 ```mermaid
 flowchart TD
@@ -48,17 +59,21 @@ flowchart TD
     M --> N[Render risk gauge + reasons]
 ```
 
-## Installation (development mode)
+The URL gets scored the moment navigation happens, the page content gets
+scanned separately once it's loaded, and the two results get merged. If
+things look bad enough, you hear about it right away — you don't have to
+go looking for trouble.
 
-1. Clone this repo:
+## Getting it running
+
+1. Clone the repo:
    ```bash
    git clone https://github.com/<your-username>/phishing-detector-extension.git
    ```
-2. Open Chrome and go to `chrome://extensions`
-3. Enable **Developer mode** (top right toggle)
-4. Click **Load unpacked** and select the project folder
-5. Pin the extension and visit any site — the badge and popup will show a
-   verdict
+2. Open Chrome and head to `chrome://extensions`
+3. Flip on **Developer mode** (top right)
+4. Click **Load unpacked** and point it at the project folder
+5. Pin the extension, visit a site, and you should see it come to life
 
 ## Project structure
 
@@ -75,8 +90,9 @@ phishing-detector-extension/
 
 ## Testing the heuristics
 
-`utils/heuristics.js` exports `analyzeUrl()` as a plain function with no
-Chrome API dependency, so it can be unit tested independently, e.g. with Jest:
+I kept `utils/heuristics.js` deliberately free of any Chrome API calls, so
+the scoring logic can be tested on its own — no browser required. Something
+like this works fine with Jest:
 
 ```js
 const { analyzeUrl } = require("./utils/heuristics");
@@ -87,15 +103,20 @@ test("flags typosquatted paypal domain", () => {
 });
 ```
 
-## Roadmap / stretch goals
+## What I'd like to add next
 
-- [ ] Integrate Google Safe Browsing API for live reputation checks
-- [ ] Domain age / WHOIS lookup
-- [ ] Replace the static blocklist with a live OpenPhish/PhishTank feed
-- [ ] Train a lightweight ML classifier on URL features and run it in-browser
-- [ ] "Report false positive/negative" button in the popup
+This started as a learning project, so there's a lot of room to grow it
+into something more serious:
 
-## Disclaimer
+- [ ] Hook into the Google Safe Browsing API for real-time reputation checks
+- [ ] Domain age / WHOIS lookups (brand-new domains are a strong signal)
+- [ ] Swap the static blocklist for a live OpenPhish/PhishTank feed
+- [ ] Train a small ML classifier on URL features and run it in-browser
+- [ ] Add a "this was wrong" button so false positives/negatives can be
+      reported
 
-This is a learning/portfolio project. Heuristic scores are indicators, not
-guarantees — always exercise your own judgment on suspicious sites.
+## A quick disclaimer
+
+This is a personal/portfolio project, not a production security product.
+The heuristics are indicators, not guarantees — please still use your own
+judgment on anything that looks even a little off.
